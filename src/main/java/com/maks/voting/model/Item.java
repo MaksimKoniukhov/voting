@@ -13,7 +13,7 @@ public class Item {
 
     private String answer;
 
-    private int totalVoices;
+    private int totalVotes;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "theme_id")
@@ -35,12 +35,12 @@ public class Item {
         this.id = id;
     }
 
-    public int getTotalVoices() {
-        return totalVoices;
+    public int getTotalVotes() {
+        return totalVotes;
     }
 
-    public void setTotalVoices(int totalVoices) {
-        this.totalVoices = totalVoices;
+    public void setTotalVotes(int totalVotes) {
+        this.totalVotes = totalVotes;
     }
 
     public String getAnswer() {
@@ -64,7 +64,7 @@ public class Item {
         return "Item{" +
                 "id=" + id +
                 ", answer='" + answer + '\'' +
-                ", totalVoices=" + totalVoices +
+                ", totalVoices=" + totalVotes +
                 ", theme=" + theme +
                 '}';
     }
