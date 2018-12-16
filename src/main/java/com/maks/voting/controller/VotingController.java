@@ -4,13 +4,11 @@ import com.maks.voting.model.Item;
 import com.maks.voting.model.Reference;
 import com.maks.voting.model.Theme;
 import com.maks.voting.service.ItemService;
-import com.maks.voting.service.ReferenceService;
 import com.maks.voting.service.ThemeService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.util.List;
 
@@ -23,13 +21,10 @@ public class VotingController {
 
     private final ItemService itemService;
 
-    private final ReferenceService referenceService;
-
     @Autowired
-    public VotingController(ThemeService themeService, ItemService itemService, ReferenceService referenceService) {
+    public VotingController(ThemeService themeService, ItemService itemService) {
         this.themeService = themeService;
         this.itemService = itemService;
-        this.referenceService = referenceService;
     }
 
     @PostMapping("create")
@@ -42,34 +37,13 @@ public class VotingController {
     @PutMapping("start/{themeId}")
     public Reference startVoting(@PathVariable("themeId") Theme theme) {
         logger.info("start method, get {}", theme);
-        if (theme.isEnabled())
-            return referenceService.getByThemeId(theme.getId());
-
-        logger.info("start {}", theme);
-
-        Theme updateTheme = themeService.updateEnabled(theme, true);
-
-        String url = ServletUriComponentsBuilder.fromCurrentContextPath().toUriString();
-        String path = String.format("%s/voting/theme/%d", url, updateTheme.getId());
-        Reference reference = new Reference(path, updateTheme);
-
-        return referenceService.create(reference);
+        return themeService.startVoting(theme);
     }
 
     @PutMapping("stop/{themeId}")
     public Theme stopVoting(@PathVariable("themeId") Theme theme) {
         logger.info("stop method, get {}", theme);
-        if (!theme.isEnabled())
-            return theme;
-
-        logger.info("stop{}", theme);
-
-        Theme updateTheme = themeService.updateEnabled(theme, false);
-
-        Reference reference = referenceService.getByThemeId(theme.getId());
-        referenceService.delete(reference);
-
-        return updateTheme;
+        return themeService.stopVoting(theme);
     }
 
     @GetMapping("theme/{themeId}/voices/{itemId}")

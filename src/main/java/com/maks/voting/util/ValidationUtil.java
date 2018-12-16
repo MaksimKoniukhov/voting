@@ -16,6 +16,12 @@ public class ValidationUtil {
         return object;
     }
 
+    public static void checkNew(Theme theme) {
+        if (theme.getId() != null) {
+            throw new IllegalArgumentException(theme + " must be new (id=null)");
+        }
+    }
+
     public static void checkThemeEnabled(Theme theme) {
         if (!theme.isEnabled())
             throw new IllegalStateException(theme + " disabled");
