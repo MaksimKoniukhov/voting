@@ -3,8 +3,7 @@ package com.maks.voting.service;
 import com.maks.voting.model.Reference;
 import com.maks.voting.model.Theme;
 import com.maks.voting.repository.ThemeRepository;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
@@ -16,8 +15,8 @@ import static com.maks.voting.util.ValidationUtil.checkNew;
 import static com.maks.voting.util.ValidationUtil.checkNotFound;
 
 @Service
+@Slf4j
 public class ThemeServiceImpl implements ThemeService {
-    private final Logger logger = LoggerFactory.getLogger(getClass());
 
     private final ThemeRepository themeRepository;
 
@@ -47,7 +46,7 @@ public class ThemeServiceImpl implements ThemeService {
         if (theme.isEnabled())
             return referenceService.getByThemeId(theme.getId());
 
-        logger.info("start {}", theme);
+        log.info("start {}", theme);
 
         theme.setEnabled(true);
         themeRepository.save(theme);
@@ -65,7 +64,7 @@ public class ThemeServiceImpl implements ThemeService {
         if (!theme.isEnabled())
             return theme;
 
-        logger.info("stop{}", theme);
+        log.info("stop{}", theme);
 
         theme.setEnabled(false);
         themeRepository.save(theme);
