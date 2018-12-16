@@ -64,8 +64,7 @@ public class Item {
         return "Item{" +
                 "id=" + id +
                 ", answer='" + answer + '\'' +
-                ", totalVoices=" + totalVotes +
-                ", theme=" + theme +
+                ", totalVotes=" + totalVotes +
                 '}';
     }
 
