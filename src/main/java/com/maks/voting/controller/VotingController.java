@@ -69,7 +69,7 @@ public class VotingController {
         return themeService.getAll();
     }
 
-    @DeleteMapping("theme/{themeId}/delete")                               //optional
+    @DeleteMapping("theme/{themeId}")                               //optional
     public Theme deleteTheme(@PathVariable("themeId") Theme theme) {
         log.info("delete {}", theme);
         themeService.delete(theme);
