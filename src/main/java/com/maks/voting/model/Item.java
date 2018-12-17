@@ -1,6 +1,7 @@
 package com.maks.voting.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.maks.voting.HasId;
 import lombok.*;
 
 import javax.persistence.*;
@@ -11,7 +12,7 @@ import javax.persistence.*;
 @RequiredArgsConstructor
 @ToString(exclude = "theme")
 @EqualsAndHashCode(of = "id")
-public class Item {
+public class Item implements HasId {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;

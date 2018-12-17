@@ -19,19 +19,22 @@ public class ItemServiceImpl implements ItemService {
 
     @Override
     public Item getItemOfTheme(Theme theme, Item item) {
-        checkNotFound(item, "Item");
-        checkNotFound(theme, "Theme");
-        checkThemeContainsItem(theme, item);
-        return item;
+        return check(theme, item);
     }
 
     @Override
     public Item voiceRegistration(Theme theme, Item item) {
-        checkNotFound(item, "Item");
-        checkNotFound(theme, "Theme");
-        checkThemeContainsItem(theme, item);
+        check(theme, item);
+
         checkThemeEnabled(theme);
         item.setTotalVotes(item.getTotalVotes() + 1);
         return itemRepository.save(item);
+    }
+
+    private Item check(Theme theme, Item item) {
+        checkNotFound(theme, "Theme");
+        checkNotFound(item, "Item");
+        checkThemeContainsItem(theme, item);
+        return item;
     }
 }

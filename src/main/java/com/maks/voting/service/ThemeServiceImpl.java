@@ -1,6 +1,5 @@
 package com.maks.voting.service;
 
-import com.maks.voting.model.Reference;
 import com.maks.voting.model.Theme;
 import com.maks.voting.repository.ThemeRepository;
 import lombok.extern.slf4j.Slf4j;
@@ -20,12 +19,9 @@ public class ThemeServiceImpl implements ThemeService {
 
     private final ThemeRepository themeRepository;
 
-    private final ReferenceService referenceService;
-
     @Autowired
-    public ThemeServiceImpl(ThemeRepository themeRepository, ReferenceService referenceService) {
+    public ThemeServiceImpl(ThemeRepository themeRepository) {
         this.themeRepository = themeRepository;
-        this.referenceService = referenceService;
     }
 
     @Override
@@ -35,44 +31,39 @@ public class ThemeServiceImpl implements ThemeService {
         Assert.notNull(theme.getItems(), "Items must not be null");
         theme.getItems().forEach(item -> {
             Assert.notNull(item, "Item must not be null");
+            checkNew(item);
             item.setTheme(theme);
         });
         return themeRepository.save(theme);
     }
 
     @Override
-    public Reference startVoting(Theme theme) {
+    public String startVoting(Theme theme) {
         checkNotFound(theme, "Theme");
-        if (theme.isEnabled())
-            return referenceService.getByThemeId(theme.getId());
+        if (theme.getPath() != null)
+            return theme.getPath();
 
         log.info("start {}", theme);
 
-        theme.setEnabled(true);
-        themeRepository.save(theme);
-
         String url = ServletUriComponentsBuilder.fromCurrentContextPath().toUriString();
         String path = String.format("%s/voting/theme/%d", url, theme.getId());
-        Reference reference = new Reference(path, theme);
 
-        return referenceService.create(reference);
+        theme.setPath(path);
+        themeRepository.save(theme);
+
+        return path;
     }
 
     @Override
     public Theme stopVoting(Theme theme) {
         checkNotFound(theme, "Theme");
-        if (!theme.isEnabled())
+        if (theme.getPath() == null)
             return theme;
 
         log.info("stop{}", theme);
 
-        theme.setEnabled(false);
-        themeRepository.save(theme);
-
-        Reference reference = referenceService.getByThemeId(theme.getId());
-        referenceService.delete(reference);
-
-        return theme;
+        theme.setPath(null);
+        return themeRepository.save(theme);
     }
 
     @Override

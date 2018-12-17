@@ -1,5 +1,6 @@
 package com.maks.voting.util;
 
+import com.maks.voting.HasId;
 import com.maks.voting.model.Item;
 import com.maks.voting.model.Theme;
 
@@ -16,14 +17,14 @@ public class ValidationUtil {
         return object;
     }
 
-    public static void checkNew(Theme theme) {
-        if (theme.getId() != null) {
-            throw new IllegalArgumentException(theme + " must be new (id=null)");
+    public static void checkNew(HasId object) {
+        if (!object.isNew()) {
+            throw new IllegalArgumentException(object + " must be new (id=null)");
         }
     }
 
     public static void checkThemeEnabled(Theme theme) {
-        if (!theme.isEnabled())
+        if (theme.getPath() == null)
             throw new IllegalStateException(theme + " disabled");
     }
 

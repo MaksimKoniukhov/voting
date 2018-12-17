@@ -1,7 +1,6 @@
 package com.maks.voting.controller;
 
 import com.maks.voting.model.Item;
-import com.maks.voting.model.Reference;
 import com.maks.voting.model.Theme;
 import com.maks.voting.service.ItemService;
 import com.maks.voting.service.ThemeService;
@@ -34,7 +33,7 @@ public class VotingController {
 
 
     @PutMapping("start/{themeId}")
-    public Reference startVoting(@PathVariable("themeId") Theme theme) {
+    public String startVoting(@PathVariable("themeId") Theme theme) {
         log.info("start method, get {}", theme);
         return themeService.startVoting(theme);
     }
@@ -69,7 +68,7 @@ public class VotingController {
         return themeService.getAll();
     }
 
-    @DeleteMapping("theme/{themeId}")                               //optional
+    @DeleteMapping("theme/{themeId}")                                     //optional
     public Theme deleteTheme(@PathVariable("themeId") Theme theme) {
         log.info("delete {}", theme);
         themeService.delete(theme);
